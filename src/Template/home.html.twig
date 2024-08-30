@@ -1,0 +1,109 @@
+{% extends 'index.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+{% for notification in notifications %}
+    <div class="alert alert-{{ notification.type }}" role="alert">
+        {{ notification.message }}
+    </div>
+{% endfor %}
+
+<div class="container text-center mt-5">
+    {% if user.photo %}
+        <img src="/BlogPHP/{{ user.photo }}" alt="Photo de profil" class="rounded-circle img-thumbnail" style="width: 150px; height: 150px;">
+    {% else %}
+        <div class="rounded-circle bg-secondary d-inline-block" style="width: 150px; height: 150px;"></div>
+    {% endif %}
+    <h1 class="fs-1 mt-4">Bienvenue, {{ user.name }} {{ user.surname }}</h1>
+    <p class="lead">{{ user.message }}</p>
+    <p>
+        <a href="/BlogPHP/{{ user.cv }}" target="_blank" download class="btn btn-primary">Télécharger le CV</a>
+    </p>
+    <p class="mt-4">Inscrit depuis : {{ user.created|date('Y') }}</p>
+    <div class="mt-4">
+        <a href="https://github.com" target="_blank" class="btn btn-dark me-2">
+            <i class="bi bi-github"></i> Github
+        </a>
+        <a href="https://fr.linkedin.com/" target="_blank" class="btn btn-primary me-2">
+            <i class="bi bi-linkedin"></i> LinkedIn
+        </a>
+        <a href="https://twitter.com" target="_blank" class="btn btn-info me-2">
+            <i class="bi bi-twitter-x"></i> 
+        </a>
+        <a href="https://fr-fr.facebook.com" target="_blank" class="btn btn-primary">
+            <i class="bi bi-facebook"></i> Facebook
+        </a>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button fs-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Demande par mail
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <form action="/BlogPHP/home" method="post">
+                        <div class="form-group mb-3">
+                            <label for="surname" class="fs-5">Nom</label>
+                            <input type="text" class="form-control" id="surname" name="surname" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="name" class="fs-5">Prénom</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="email" class="fs-5">E-mail</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="message" class="fs-5">Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <div class="form-group mb-3 text-end">
+                            <button type="submit" class="btn btn-primary">Envoyer</button>
+                        </div>    
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% if isAdmin %}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed fs-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Commentaires à valider
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    {% if comments is empty %}
+                        <p>Aucun commentaire en attente de validation.</p>
+                    {% else %}
+                        <ul class="list-group">
+                            {% for comment in comments %}
+                                <li class="list-group-item">
+                                    <strong>{{ comment.username }}</strong> a commenté :
+                                    <p>{{ comment.content }}</p>
+                                    <form method="post" action="/BlogPHP/approveComment/{{ comment.commentId }}" class="d-inline">
+                                        <button type="submit" class="btn btn-success btn-sm">Approuver</button>
+                                    </form>
+                                    <form method="post" action="/BlogPHP/deleteComment/{{ comment.commentId }}" class="d-inline mt-2">
+                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                    </form>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>    
+</div>
+
+{% endblock %}
