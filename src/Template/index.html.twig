@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="style4.css" rel="stylesheet">
+</head>
+<body class="{% if username %}background-logged-in{% else %}background-logged-out{% endif %}">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="/BlogPHP/home">Accueil</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                                <a class="nav-link" href="/BlogPHP/listPost">Articles</a>
+                        </li>
+                        {% if username %}
+                            {% if isAdmin == 1 %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/BlogPHP/addPost">Nouvel article</a>
+                                </li>
+                            {% endif %}
+                            <li class="nav-item line-separator">
+                                <a class="nav-link" href="/BlogPHP/editProfile">Profil</a>
+                            </li>
+                            <li class="nav-item">
+                                <span class="nav-link text-blue">Bonjour, {{ username }}</span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/BlogPHP/logout">Se déconnecter</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/BlogPHP/userLogin">Se connecter</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/BlogPHP/userRegister">S'inscrire</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid d-flex flex-column" style="min-height: 100vh;">
+    {% block content %}
+    
+    <!-- Titre principal en pleine largeur et hauteur -->
+    <div class="d-flex line align-items-center justify-content-center" style="min-height: 100vh;">
+        <h1 class="display-3 text-center fst-italic bg-light">Bienvenue sur le blog</h1>
+    </div>
+
+    <div class="d-flex">
+        <div class="box bg-white p-5 mt-4" style="max-width: 800px; margin: 0 auto;">
+            <h2>À propos de notre blog</h2>
+            <p>
+                Ce blog est dédié à partager des articles sur divers sujets passionnants, allant de la technologie 
+                à la culture. Notre objectif est de fournir des informations de qualité et de susciter la discussion 
+                parmi nos lecteurs.
+            </p>
+        </div>
+
+        <div class="p-5 mt-4" style="max-width: 800px; margin: 0 auto;">
+        </div>
+    </div>
+
+    <div class="d-flex">
+        <!-- Section d'incitation à se connecter ou s'inscrire -->
+        <div class="p-5 mt-4" style="max-width: 800px; margin: 0 auto;">
+        </div> 
+        <div class="box bg-white p-5 mt-4" style="max-width: 800px; margin: 0 auto;">
+            <h2>Rejoignez-nous !</h2>
+            <p>
+                Pour accéder à plus de contenu et participer à la discussion, connectez-vous ou inscrivez-vous dès maintenant.
+            </p>
+            <a href="/BlogPHP/userLogin" class="btn btn-primary mx-2">Se connecter</a>
+            <a href="/BlogPHP/userRegister" class="btn btn-secondary mx-2">S'inscrire</a>
+        </div> 
+    </div>
+
+    <div class="d-flex">
+        <div class="box bg-white p-5 mt-4" style="max-width: 800px; margin: 0 auto;">
+            <h2>Contactez-nous !</h2>
+            <p>
+                Pour plus d'information, nous vous invitons à nous <a href="mailto:gngoyi58@gmail.com">contactez par mail</a>.
+            </p>
+        </div>        <div class="p-5 mt-4" style="max-width: 800px; margin: 0 auto;">
+        </div>  
+    </div>
+
+    {# <div class="bg-white p-5 mt-4" style="max-width: 800px; margin: 0 auto;">
+        <h2>Dernier article publié</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ lastPost.title }}</h5>
+                <p class="card-text">{{ lastPost.content }}</p>
+                <a href="/BlogPHP/post/{{ lastPost.id }}" class="btn btn-primary">Lire plus</a>
+            </div>
+        </div>
+    </div> #}
+    
+    {% endblock %}
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-4 mt-5">
+    <div class="container">
+        <p>&copy; 2024 - Mon Blog. Tous droits réservés.</p>
+        <p>
+            <a href="/terms" class="text-white">Conditions d'utilisation</a> | 
+            <a href="/privacy" class="text-white">Politique de confidentialité</a>
+        </p>
+    </div>
+</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</body>
+</html>

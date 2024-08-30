@@ -1,0 +1,46 @@
+{% extends 'index.html.twig' %}
+
+{% block title %}Ajouter un article{% endblock %}
+
+{% block content %}
+{% for notification in notifications %}
+    <div class="alert alert-{{ notification.type }}" role="alert">
+        {{ notification.message }}
+    </div>
+{% endfor %}
+
+<div class="container mt-5">
+
+    <h1 class="fs-1 mb-4">Ajouter un article</h1>
+    <div class="d-flex justify-content-center">  
+            <div class="w-50">  
+                <form method="post" action="/BlogPHP/addPost">
+                    <div class="mb-3">
+                        <label for="title" class="form-label fs-3">Titre :</label>
+                        <input type="text" id="title" name="title" class="form-control" required>
+                        {% if errors.title %}
+                            <div class="invalid-feedback" style="display:block;">{{ errors.title }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="chapo" class="form-label fs-3">Chapô :</label>
+                        <input type="text" id="chapo" name="chapo" class="form-control" required>
+                        {% if errors.chapo %}
+                            <div class="invalid-feedback" style="display:block;">{{ errors.chapo }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="content" class="form-label fs-3">Contenu :</label>
+                        <textarea id="content" name="content" class="form-control" rows="5" required></textarea>
+                        {% if errors.content %}
+                            <div class="invalid-feedback" style="display:block;">{{ errors.content }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3 text-end">
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                    </div>
+                </form>
+            </div>
+    </div>        
+</div>
+{% endblock %}
