@@ -1,0 +1,49 @@
+img{
+    object-fit: contain;
+}
+
+.background-logged-in {
+    background-image: url('./uploads/fonds/image_bureau2.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+}
+
+.background-logged-out {
+    background-image: url('./uploads/fonds/image_bureau1.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+}
+
+.d-flex .line {
+    border-bottom: 15px solid rgba(255, 255, 255, 1);
+}
+
+.box{
+    box-shadow: 10px 9px 12px #6a6767;
+}
+
+form .form-label{
+    background-color: #ffe4c48f;
+}
+
+.accordion-button{
+background-color: #6a676782;
+}
+
+.accordion-button:not(.collapsed){
+    background-color: #ffe4c48f;
+}    
+
+.list-group{
+    --bs-list-group-bg: #ffe4c4d1;
+    --bs-list-group-border-color: #1f1e1dd1;
+
+}
+
+.nav-link .text-blue{
+    color: blue;
+}
