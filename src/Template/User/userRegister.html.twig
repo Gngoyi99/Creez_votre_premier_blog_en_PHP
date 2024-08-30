@@ -1,0 +1,53 @@
+{% extends 'index.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1 class="fs-1">S'inscrire</h1>
+        <div class="d-flex justify-content-center"> 
+            <div class="w-50">
+                <form action="/BlogPHP/userRegister" method="POST" class="mt-4">
+                    <div class="mb-3">
+                        <label for="surname" class="fs-3 form-label">Nom :</label>
+                        <input type="text" id="surname" name="surname" placeholder="Nom" required class="form-control">
+                        {% if errors.surname %}
+                            <div class="invalid-feedback" style="display:block;">{{ errors.surname }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="fs-3 form-label">Prénom :</label>
+                        <input type="text" id="name" name="name" placeholder="Prénom" required class="form-control">
+                        {% if errors.name %}
+                            <div class="invalid-feedback" style="display:block;">{{ errors.name }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="username" class="fs-3 form-label">Pseudo :</label>
+                        <input type="text" id="username" name="username" placeholder="Pseudo" required class="form-control">
+                        {% if errors.username %}
+                            <div class="invalid-feedback" style="display:block;">{{ errors.username }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="fs-3 form-label">Email :</label>
+                        <input type="email" id="email" name="email" placeholder="Email" required class="form-control">
+                        {% if errors.email %}
+                            <div class="invalid-feedback" style="display:block;">{{ errors.email }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="fs-3 form-label">Mot de passe :</label>
+                        <input type="password" id="password" name="password" placeholder="Mot de passe" required class="form-control">
+                        {% if errors.password %}
+                            <div class="invalid-feedback" style="display:block;">{{ errors.password }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3 text-end">
+                        <button type="submit" class="btn btn-primary">S'inscrire</button>
+                    </div>    
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
