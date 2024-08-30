@@ -35,5 +35,5 @@ Conseil bonus l'utilisation d'un serveur MAMP vous facilitera l'accès à ce pro
 
 3. Importez le fichier SQL fourni pour configurer les tables de la base de données.
 
--Aller dans le dossier tables
+   Aller dans le dossier tables
 
