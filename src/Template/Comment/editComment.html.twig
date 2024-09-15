@@ -10,11 +10,11 @@
 {% endfor %}
 
 <div class="container mt-4">
-    <h1>Modifier le commentaire</h1>
+    <h1 class="fs-1">Modifier le commentaire</h1>
     <form method="post" action="/BlogPHP/editComment/{{ comment.commentId }}">
         <div class="mb-3">
             <label for="content" class="form-label">Contenu du commentaire</label>
-            <textarea id="content" name="content" class="form-control" rows="5">{{ comment.content }}</textarea>
+            <textarea id="content" name="content" class="form-control" rows="5">{{ comment.content|raw }}</textarea>
         </div>
         <button type="submit" class="btn btn-primary">Mettre à jour</button>
     </form>

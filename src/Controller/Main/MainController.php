@@ -1,14 +1,28 @@
 <?php
+
 namespace Blog\Twig\Controller\Main;
 
 use Blog\Twig\Controller\CoreController;
 use Blog\Twig\Utils\Validator;
 use Blog\Twig\Utils\Notification;
+use Blog\Twig\Repository\CommentRepository;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 use PDO;
 
-class MainController extends CoreController {
 
-    public function index() {
+class MainController extends CoreController
+{
+    private $commentRepository;
+
+    public function __construct($twig, PDO $db)
+    {
+        parent::__construct($twig, $db);
+        $this->commentRepository = new CommentRepository($db);
+    }
+
+    public function index()
+    {
         if (isset($_SESSION['username'])) {
             $this->home();
         } else {
@@ -16,17 +30,17 @@ class MainController extends CoreController {
         }
     }
 
-    public function home() {
+    public function home()
+    {
         $notifications = Notification::getMessages();
-        
+
+        //Mail
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Récupération des données du formulaire
-            $surname = $_POST['surname'];
-            $name = $_POST['name'];
-            $email = $_POST['email'];
-            $message = $_POST['message'];
-    
-            // Validation des données
+            $surname = htmlspecialchars(trim($_POST['surname']));
+            $name = htmlspecialchars(trim($_POST['name']));
+            $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+            $message = htmlspecialchars(trim($_POST['message']));
+
             $errors = [];
             if (!Validator::validateNameAndSurname($surname, 'surname')) {
                 $errors['surname'] = 'Le nom ne peut contenir que des lettres, des espaces, des apostrophes et des tirets';
@@ -40,63 +54,55 @@ class MainController extends CoreController {
             if (empty($message)) {
                 $errors['message'] = 'Le message ne peut pas être vide';
             }
-    
+
             if (!empty($errors)) {
-                // Ajout des erreurs dans les notifications
                 foreach ($errors as $field => $error) {
                     Notification::addMessage(Notification::ERROR, $error);
                 }
-    
-                // Affichage de la page d'accueil avec les erreurs
+
                 echo $this->twig->render('home.html.twig', [
                     'notifications' => $notifications,
                     'errors' => $errors
                 ]);
                 return;
             }
-    
-            // Envoi du message par e-mail
-            $to = 'gngoyi58@gmail.com'; // Adresse site admin
-            $subject = 'Nouveau message de contact';
-            $body = "Nom: $surname\nPrénom: $name\nE-mail: $email\nMessage: $message";
-            $headers = 'From: ' . $email;
-    
-            if (mail($to, $subject, $body, $headers)) {
+
+            $mail = new PHPMailer(true);
+
+            try {
+                $mail->isSMTP();
+                $mail->Host = '127.0.0.1';
+                $mail->SMTPAuth = false;
+                $mail->Port = 1025;
+
+                $mail->setFrom($email, $name);
+                $mail->addAddress('gngoyi58@gmail.com');
+
+                $mail->isHTML(true);
+                $mail->Subject = 'Nouveau message de contact';
+                $mail->Body    = "Nom: $surname<br>Prénom: $name<br>E-mail: $email<br>Message: $message";
+                $mail->AltBody = "Nom: $surname\nPrénom: $name\nE-mail: $email\nMessage: $message";
+
+                $mail->send();
                 Notification::addMessage(Notification::SUCCESS, 'Votre message a été envoyé avec succès.');
-            } else {
-                Notification::addMessage(Notification::ERROR, 'Une erreur est survenue lors de l\'envoi du message. Veuillez réessayer plus tard.');
+            } catch (Exception $e) {
+                Notification::addMessage(Notification::ERROR, "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer plus tard. Mailer Error: {$mail->ErrorInfo}");
             }
-    
-            // Redirection vers la page d'accueil pour éviter la soumission multiple
-            header('Location: /BlogPHP/home');
-            exit;
         }
-        // Partie Admin
+
+        //Admin 
         if (isset($_SESSION['id_user'])) {
             $userId = $_SESSION['id_user'];
-    
-            // Récupération des informations de l'utilisateur dans la db
-            $stmt = $this->db->prepare('SELECT * FROM User WHERE id_user = :id_user');
-            $stmt->execute(['id_user' => $userId]);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-            // Vérification si l'utilisateur est admin
+
+            $user = $this->commentRepository->getUserById($userId);
+
             $isAdmin = isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] == 1;
-    
-            // Récupération des commentaires en attente de validation si l'utilisateur connecté est Admin
+
             $comments = [];
             if ($isAdmin) {
-                $stmtComments = $this->db->prepare('
-                    SELECT c.*, u.username 
-                    FROM CommentPost c
-                    JOIN User u ON c.id_user = u.id_user 
-                    WHERE c.approved = 0
-                ');
-                $stmtComments->execute();
-                $comments = $stmtComments->fetchAll(PDO::FETCH_ASSOC);
+                $comments = $this->commentRepository->getPendingComments();
             }
-    
-            // Affichage de la page d'accueil avec les informations de l'utilisateur et les commentaires si il est Admin
+
             echo $this->twig->render('home.html.twig', [
                 'user' => $user,
                 'isAdmin' => $isAdmin,
@@ -107,5 +113,4 @@ class MainController extends CoreController {
             echo $this->twig->render('index.html.twig');
         }
     }
-    
 }

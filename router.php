@@ -19,12 +19,28 @@ session_start();
 $loader = new FilesystemLoader(BASE_PATH . '/src/Template/');
 $twig = new Environment($loader);
 
+// Charger la configuration de la db
+$configPath = BASE_PATH . '/config/db.php';
+if (!file_exists($configPath)) {
+    throw new Exception("Configuration file not found: $configPath");
+}
+$config = require $configPath;
+
+// Initialiser la connexion à la db
+try {
+    $dsn = "mysql:host={$config['host']};dbname={$config['dbname']};charset={$config['charset']}";
+    $db = new PDO($dsn, $config['user'], $config['password']);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Erreur de connexion à la base de données : " . $e->getMessage());
+}
+
 // Initialisation des contrôleurs
-$mainController = new MainController($twig);
-$userController = new UserController($twig);
-$postController = new PostController($twig);
-$commentController = new CommentController($twig);
-$errorController = new ErrorController($twig);
+$mainController = new MainController($twig, $db);
+$userController = new UserController($twig, $db);
+$postController = new PostController($twig, $db);
+$commentController = new CommentController($twig, $db);
+$errorController = new ErrorController($twig, $db);
 
 // Fonction pour gérer les routes
 function handleRoute($mainController, $userController, $postController, $commentController, $errorController) {
@@ -122,7 +138,6 @@ function handleRoute($mainController, $userController, $postController, $comment
 // Passer les informations de l'utilisateur à Twig
 $twig->addGlobal('username', $_SESSION['username'] ?? null);
 $twig->addGlobal('isAdmin', $_SESSION['isAdmin'] ?? null);
-
 
 // Appel de la fonction de routage
 handleRoute($mainController, $userController, $postController, $commentController, $errorController);

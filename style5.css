@@ -51,3 +51,7 @@ background-color: #6a676782;
 .line-separator{
     border-right: 4px solid bisque;
 }
+
+.invalid-feedback{
+    background-color: bisque;
+}

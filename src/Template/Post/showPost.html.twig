@@ -25,12 +25,12 @@
         <div class="w-50">
             <div class="card mb-4">
         <div class="card-header">
-            <h2 class="fs-1">{{ post.title }}</h2>
+            <h2 class="fs-1">{{ post.title|raw }}</h2>
             <small>Publié le {{ post.created_at|date("d/m/Y") }}</small>
         </div>
         <div class="card-body">
-            <p class="card-text"><strong>Chapô: </strong>{{ post.chapo }}</p>
-            <p class="card-text">{{ post.content }}</p>
+            <p class="card-text"><strong>Chapô: </strong>{{ post.chapo|raw }}</p>
+            <p class="card-text">{{ post.content|raw }}</p>
         </div>
         {% if isAdmin == 1 %}
         <div class="card-footer">
@@ -47,7 +47,7 @@
                 {% for comment in comments %}
                     <div class="mb-3">
                         <p><strong>{{ comment.username }}</strong> le {{ comment.created_at|date("d/m/Y H:i") }}</p>
-                        <p>{{ comment.content }}</p>
+                        <p>{{ comment.content|raw }}</p>
                         {% if comment.id_user == id_user or isAdmin == 1 %}
                             <a href="/BlogPHP/editComment/{{ comment.commentId }}" class="btn btn-secondary btn-sm">Modifier</a>
                             <a href="/BlogPHP/deleteComment/{{ comment.commentId }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire?')">Supprimer</a>

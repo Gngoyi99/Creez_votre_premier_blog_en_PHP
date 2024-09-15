@@ -14,15 +14,15 @@
     <form method="post" action="/BlogPHP/editPost/{{ post.postId }}">
         <div class="mb-3">
             <label for="title" class="form-label">Titre</label>
-            <input type="text" id="title" name="title" class="form-control" value="{{ post.title }}" required>
+            <input type="text" id="title" name="title" class="form-control" value="{{ post.title|raw }}" required>
         </div>
         <div class="mb-3">
             <label for="chapo" class="form-label">Chapô</label>
-            <input type="text" id="chapo" name="chapo" class="form-control" value="{{ post.chapo }}" required>
+            <input type="text" id="chapo" name="chapo" class="form-control" value="{{ post.chapo|raw }}" required>
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">Contenu</label>
-            <textarea id="content" name="content" class="form-control" rows="5" required>{{ post.content }}</textarea>
+            <textarea id="content" name="content" class="form-control" rows="5" required>{{ post.content|raw }}</textarea>
         </div>
         <button type="submit" class="btn btn-primary">Mettre à jour</button>
     </form>
