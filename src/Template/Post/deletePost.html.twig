@@ -11,7 +11,7 @@
 
 <div class="container mt-4">
     <h1 class="fs-1">Supprimer l'article</h1>
-    <p>Êtes-vous sûr de vouloir supprimer l'article intitulé "{{ post.title }}" ?</p>
+    <p>Êtes-vous sûr de vouloir supprimer l'article intitulé "{{ post.title|raw }}" ?</p>
     <form method="post" action="/BlogPHP/deletePost/{{ post.postId }}">
         <button type="submit" class="btn btn-danger">Supprimer</button>
         <a href="/BlogPHP/showPost/{{ post.postId }}" class="btn btn-secondary">Annuler</a>

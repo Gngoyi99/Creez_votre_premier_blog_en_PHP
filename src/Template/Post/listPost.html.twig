@@ -16,8 +16,8 @@
         <div class="list-group">
         {% for post in posts %}
         <a href="/BlogPHP/showPost/{{ post.postId }}" class="list-group-item list-group-item-action">
-            <h5 class="mb-1">{{ post.title }}</h5>
-            <p class="mb-1">{{ post.chapo }}</p>
+            <h5 class="mb-1">{{ post.title|raw }}</h5>
+            <p class="mb-1">{{ post.chapo|raw  }}</p>
             <small>Dernière modification : {{ post.updated_at|date('d/m/Y H:i') }}</small>
         </a>
         {% endfor %}

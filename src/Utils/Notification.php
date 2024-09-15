@@ -4,7 +4,7 @@ namespace Blog\Twig\Utils;
 
 class Notification {
     const SUCCESS = 'success';
-    const ERROR = 'error';
+    const ERROR = 'danger';
 
     public static function addMessage($type, $message) {
         if (!isset($_SESSION['notifications'])) {
