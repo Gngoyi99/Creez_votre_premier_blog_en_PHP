@@ -35,5 +35,15 @@ Conseil bonus l'utilisation d'un serveur MAMP vous facilitera l'accès à ce pro
 
 3. Importez le fichier SQL fourni pour configurer les tables de la base de données.
 
+   Créez un dossier config/ à la racine du projet contenant :
+   return[
+    'host' => 'localhost',
+    'dbname' => 'dbname',
+    'user' => 'user',
+    'password' => 'password',
+    'charset' => 'utf8mb4',
+      ];
+   En mettant les coordonnées de votre db, par la suite vous pouvez inclure les tables du dossiers tables/.
+
    Aller dans le dossier tables (Les identifiant du User Admin sont Idf: "Admin1234!" mdp: "Admin1234!")
 
