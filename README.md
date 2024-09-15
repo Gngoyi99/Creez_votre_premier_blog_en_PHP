@@ -35,7 +35,7 @@ Conseil bonus l'utilisation d'un serveur MAMP vous facilitera l'accès à ce pro
 
 3. Importez le fichier SQL fourni pour configurer les tables de la base de données.
 
-   Créez un dossier config/ à la racine du projet contenant :
+   Créez un dossier config/ à la racine du projet contenant le fichier db.php:
    return[
     'host' => 'localhost',
     'dbname' => 'dbname',
